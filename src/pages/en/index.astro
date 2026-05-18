@@ -1,24 +1,24 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const koPosts = (await getCollection('postsKo')).sort(
+const enPosts = (await getCollection('postsEn')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
-const enPosts = await getCollection('postsEn');
-const enSlugs = new Set(enPosts.map((p) => p.id));
+const koPosts = await getCollection('postsKo');
+const koSlugs = new Set(koPosts.map((p) => p.id));
 
 const siteName = "Gihun's brain";
 const siteDescription =
-  "Lee Gihun (이기훈) — ML researcher background, currently leading a 7-person cross-functional product team. 생각 dump와 팀 공유 공간. AI, 팀 빌딩, 의사결정에 대한 글.";
+  "Lee Gihun — ML researcher background, currently leading a 7-person cross-functional product team. Writing on AI, team building, decision-making, and leadership.";
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: siteName,
-  url: 'https://lee-gihun.github.io/',
+  url: 'https://lee-gihun.github.io/en/',
   description: siteDescription,
-  inLanguage: 'ko',
+  inLanguage: 'en',
   author: {
     '@type': 'Person',
     name: 'Lee Gihun',
@@ -31,7 +31,7 @@ const jsonLd = {
   title={siteName}
   description={siteDescription}
   type="website"
-  lang="ko"
+  lang="en"
 >
   <script
     slot="head"
@@ -41,27 +41,27 @@ const jsonLd = {
 
   <header>
     <h1>{siteName}</h1>
-    <p>여기는 생각 dump가 모이는 곳.</p>
+    <p>A space for thinking out loud.</p>
     <p class="lang-switch">
-      <a href="/en/">English →</a>
+      <a href="/">한국어 →</a>
     </p>
   </header>
 
   <main>
     <ul class="post-list">
       {
-        koPosts.map((post) => {
+        enPosts.map((post) => {
           const date = post.data.pubDate.toISOString().split('T')[0];
-          const hasEn = enSlugs.has(post.id);
+          const hasKo = koSlugs.has(post.id);
           return (
             <li>
-              <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+              <a href={`/en/posts/${post.id}/`}>{post.data.title}</a>
               <p class="meta" style="margin-top: 0.25rem; margin-bottom: 0;">
                 <time datetime={date}>{date}</time>
-                {hasEn && (
+                {hasKo && (
                   <>
                     <span class="sep">·</span>
-                    <a href={`/en/posts/${post.id}/`}>EN</a>
+                    <a href={`/posts/${post.id}/`}>KO</a>
                   </>
                 )}
               </p>

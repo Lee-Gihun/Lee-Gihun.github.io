@@ -1,31 +1,47 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 
-interface Props {
+interface Translation {
   title: string;
-  title_en: string;
-  description: string;
-  pubDate: Date;
-  lang: string;
-  slug: string;
-  readingTime: number;
+  url: string;
+  lang: 'ko' | 'en';
 }
 
-const { title, title_en, description, pubDate, lang, slug, readingTime } =
-  Astro.props;
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  lang: 'ko' | 'en';
+  postUrl: string;
+  markdownUrl: string;
+  readingTime: number;
+  translation?: Translation;
+}
 
-const siteUrl = Astro.site!.toString().replace(/\/$/, '');
-const postUrl = `${siteUrl}/posts/${slug}/`;
-const markdownUrl = `${siteUrl}/posts/${slug}.md`;
+const {
+  title,
+  description,
+  pubDate,
+  lang,
+  postUrl,
+  markdownUrl,
+  readingTime,
+  translation,
+} = Astro.props;
+
 const formattedDate = pubDate.toISOString().split('T')[0];
+const homeUrl = lang === 'en' ? '/en/' : '/';
+const homeLabel = lang === 'en' ? "← Gihun's brain" : "← Gihun's brain";
+const toggleLabel =
+  translation && (translation.lang === 'en' ? 'Read in English →' : '한국어로 읽기 →');
+const minReadLabel = lang === 'en' ? 'min read' : 'min read';
 
-const jsonLd = {
+const jsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
   headline: title,
-  alternativeHeadline: title_en,
   description,
-  inLanguage: lang,
+  inLanguage: lang === 'en' ? 'en' : 'ko',
   datePublished: pubDate.toISOString(),
   dateModified: pubDate.toISOString(),
   author: {
@@ -45,6 +61,16 @@ const jsonLd = {
   },
   url: postUrl,
 };
+
+if (translation) {
+  jsonLd.alternativeHeadline = translation.title;
+  jsonLd.workTranslation = {
+    '@type': 'CreativeWork',
+    headline: translation.title,
+    inLanguage: translation.lang,
+    url: translation.url,
+  };
+}
 ---
 <BaseLayout
   title={title}
@@ -53,6 +79,7 @@ const jsonLd = {
   pubDate={pubDate}
   lang={lang}
   markdownPath={markdownUrl}
+  translation={translation && { url: translation.url, lang: translation.lang }}
 >
   <script
     slot="head"
@@ -61,7 +88,13 @@ const jsonLd = {
   />
 
   <nav class="top">
-    <a href="/">← Gihun's brain</a>
+    <a href={homeUrl}>{homeLabel}</a>
+    {translation && (
+      <>
+        <span class="sep">·</span>
+        <a href={translation.url}>{toggleLabel}</a>
+      </>
+    )}
   </nav>
 
   <article>
@@ -70,7 +103,7 @@ const jsonLd = {
       <p class="meta">
         <time datetime={formattedDate}>{formattedDate}</time>
         <span class="sep">·</span>
-        <span>{readingTime} min read</span>
+        <span>{readingTime} {minReadLabel}</span>
       </p>
     </header>
 
@@ -78,7 +111,9 @@ const jsonLd = {
 
     <footer class="post">
       <p>
-        <a href={markdownUrl}>Markdown 버전</a> · <a href="/llms.txt">llms.txt</a>
+        <a href={markdownUrl}>{lang === 'en' ? 'Markdown version' : 'Markdown 버전'}</a>
+        {' · '}
+        <a href="/llms.txt">llms.txt</a>
       </p>
     </footer>
   </article>

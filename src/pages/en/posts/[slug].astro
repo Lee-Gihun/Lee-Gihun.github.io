@@ -1,9 +1,9 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
-import PostLayout from '../../layouts/PostLayout.astro';
+import PostLayout from '../../../layouts/PostLayout.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('postsKo');
+  const posts = await getCollection('postsEn');
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
@@ -14,15 +14,15 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 
 const siteUrl = Astro.site!.toString().replace(/\/$/, '');
-const postUrl = `${siteUrl}/posts/${post.id}/`;
-const markdownUrl = `${siteUrl}/posts/${post.id}.md`;
+const postUrl = `${siteUrl}/en/posts/${post.id}/`;
+const markdownUrl = `${siteUrl}/en/posts/${post.id}.md`;
 
-const enEntry = await getEntry('postsEn', post.id);
-const translation = enEntry
+const koEntry = await getEntry('postsKo', post.id);
+const translation = koEntry
   ? {
-      title: enEntry.data.title,
-      url: `${siteUrl}/en/posts/${post.id}/`,
-      lang: 'en' as const,
+      title: koEntry.data.title,
+      url: `${siteUrl}/posts/${post.id}/`,
+      lang: 'ko' as const,
     }
   : undefined;
 
@@ -33,7 +33,8 @@ function readingTime(text: string): number {
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/[#*_~>\-+|]/g, '')
     .trim();
-  return Math.max(1, Math.round(stripped.length / 500));
+  const words = stripped.split(/\s+/).filter((w) => w.length > 0).length;
+  return Math.max(1, Math.round(words / 220));
 }
 
 const minutes = readingTime(post.body ?? '');
@@ -42,7 +43,7 @@ const minutes = readingTime(post.body ?? '');
   title={post.data.title}
   description={post.data.description}
   pubDate={post.data.pubDate}
-  lang="ko"
+  lang="en"
   postUrl={postUrl}
   markdownUrl={markdownUrl}
   readingTime={minutes}

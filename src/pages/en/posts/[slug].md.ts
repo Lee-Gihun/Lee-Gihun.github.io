@@ -2,7 +2,7 @@ import type { APIRoute, GetStaticPaths } from 'astro';
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await getCollection('postsKo');
+  const posts = await getCollection('postsEn');
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
@@ -10,19 +10,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const GET: APIRoute = async ({ props }) => {
-  const post = props.post as CollectionEntry<'postsKo'>;
+  const post = props.post as CollectionEntry<'postsEn'>;
   const date = post.data.pubDate.toISOString().split('T')[0];
-  const enEntry = await getEntry('postsEn', post.id);
+  const koEntry = await getEntry('postsKo', post.id);
 
   const headerLines = [
     `# ${post.data.title}`,
-    enEntry ? `# ${enEntry.data.title}` : null,
+    koEntry ? `# ${koEntry.data.title}` : null,
     '',
     `> Published: ${date}`,
-    `> Author: Lee Gihun (이기훈)`,
-    `> URL: https://lee-gihun.github.io/posts/${post.id}/`,
-    enEntry
-      ? `> English version: https://lee-gihun.github.io/en/posts/${post.id}/`
+    `> Author: Lee Gihun`,
+    `> URL: https://lee-gihun.github.io/en/posts/${post.id}/`,
+    koEntry
+      ? `> Korean version: https://lee-gihun.github.io/posts/${post.id}/`
       : null,
     '',
   ].filter((line): line is string => line !== null);
