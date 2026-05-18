@@ -1,4 +1,4 @@
-# Gihun's brain
+# Dylan's brain
 
 Source for [lee-gihun.github.io](https://lee-gihun.github.io).
 

@@ -12,7 +12,7 @@ export const GET: APIRoute = async ({ site }) => {
   const baseUrl = site!.toString().replace(/\/$/, '');
 
   const lines = [
-    `# Gihun's brain`,
+    `# Dylan's brain`,
     '',
     `> Lee Gihun (이기훈). ML researcher background, currently leading a 7-person cross-functional product team (backend, frontend, ML, design, PM). Writes on AI, team building, decision-making, and leadership. Primary language Korean. Selected posts also available in English.`,
     '',
