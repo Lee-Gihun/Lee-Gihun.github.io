@@ -1,6 +1,6 @@
 ---
 title: "What does a manager do in the age of AI?"
-description: "The 'managers should delegate' advice doesn't quite fit anymore. Writing out what I think a leader actually does, building on Elena Verna's 'IC work is the new career flex.'"
+description: "What I was told when I became a manager. 'You have to delegate. Drifting from the work is inevitable. The skills you were good at will decay anyway.' I followed it for a while. Two things broke at once."
 pubDate: 2026-05-18
 ---
 
