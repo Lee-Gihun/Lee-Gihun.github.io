@@ -8,9 +8,20 @@ const enPosts = (await getCollection('postsEn')).sort(
 const koPosts = await getCollection('postsKo');
 const koSlugs = new Set(koPosts.map((p) => p.id));
 
+function readingTime(text: string): number {
+  const stripped = text
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`]*`/g, '')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[#*_~>\-+|]/g, '')
+    .trim();
+  const words = stripped.split(/\s+/).filter((w) => w.length > 0).length;
+  return Math.max(1, Math.round(words / 220));
+}
+
 const siteName = "Gihun's brain";
 const siteDescription =
-  "Lee Gihun — ML researcher background, currently leading a 7-person cross-functional product team. Writing on AI, team building, decision-making, and leadership.";
+  "Lee Gihun. ML researcher background, currently leading a 7-person cross-functional product team. Writing on AI, team building, and decision-making.";
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -39,12 +50,14 @@ const jsonLd = {
     set:html={JSON.stringify(jsonLd)}
   />
 
-  <header>
+  <header class="site-header">
     <h1>{siteName}</h1>
-    <p>A space for thinking out loud.</p>
-    <p class="lang-switch">
-      <a href="/">한국어 →</a>
+    <p class="tagline">
+      A space for thinking out loud. ML researcher background, currently leading
+      a 7-person cross-functional product team. Notes on AI, team building, and
+      decision-making.
     </p>
+    <p class="lang-switch"><a href="/">한국어 →</a></p>
   </header>
 
   <main>
@@ -52,12 +65,17 @@ const jsonLd = {
       {
         enPosts.map((post) => {
           const date = post.data.pubDate.toISOString().split('T')[0];
+          const mins = readingTime(post.body ?? '');
           const hasKo = koSlugs.has(post.id);
           return (
             <li>
-              <a href={`/en/posts/${post.id}/`}>{post.data.title}</a>
-              <p class="meta" style="margin-top: 0.25rem; margin-bottom: 0;">
+              <h2 class="post-list-title">
+                <a href={`/en/posts/${post.id}/`}>{post.data.title}</a>
+              </h2>
+              <p class="post-list-meta">
                 <time datetime={date}>{date}</time>
+                <span class="sep">·</span>
+                <span>{mins} min read</span>
                 {hasKo && (
                   <>
                     <span class="sep">·</span>
@@ -65,10 +83,23 @@ const jsonLd = {
                   </>
                 )}
               </p>
+              <p class="post-list-description">{post.data.description}</p>
             </li>
           );
         })
       }
     </ul>
   </main>
+
+  <footer class="site">
+    <p>
+      © 2026 Lee Gihun
+      <span class="sep">·</span>
+      <a href="https://github.com/Lee-Gihun">GitHub</a>
+      <span class="sep">·</span>
+      <a href="/llms.txt">llms.txt</a>
+      <span class="sep">·</span>
+      <a href="/sitemap-index.xml">Sitemap</a>
+    </p>
+  </footer>
 </BaseLayout>

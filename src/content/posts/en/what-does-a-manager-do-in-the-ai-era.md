@@ -1,6 +1,6 @@
 ---
 title: "What does a manager do in the age of AI?"
-description: "An addition to Elena Verna's 'IC work is the new career flex.' In the age of AI, ICs expand into managing and managers expand into IC work — two directions of change. And one thing that doesn't disappear: setting the standards."
+description: "If AI shrinks the management layer, what does the remaining leader actually do? An addition to Elena Verna's 'IC work is the new career flex,' from the manager's side."
 pubDate: 2026-05-18
 ---
 

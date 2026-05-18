@@ -8,9 +8,19 @@ const koPosts = (await getCollection('postsKo')).sort(
 const enPosts = await getCollection('postsEn');
 const enSlugs = new Set(enPosts.map((p) => p.id));
 
+function readingTime(text: string): number {
+  const stripped = text
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`]*`/g, '')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[#*_~>\-+|]/g, '')
+    .trim();
+  return Math.max(1, Math.round(stripped.length / 500));
+}
+
 const siteName = "Gihun's brain";
 const siteDescription =
-  "Lee Gihun (이기훈) — ML researcher background, currently leading a 7-person cross-functional product team. 생각 dump와 팀 공유 공간. AI, 팀 빌딩, 의사결정에 대한 글.";
+  "Lee Gihun (이기훈). ML 리서치 사이언티스트 출신, 지금은 7명짜리 cross-functional 제품 팀을 리딩한다. AI, 팀 빌딩, 의사결정에 대한 글.";
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -39,12 +49,12 @@ const jsonLd = {
     set:html={JSON.stringify(jsonLd)}
   />
 
-  <header>
+  <header class="site-header">
     <h1>{siteName}</h1>
-    <p>여기는 생각 dump가 모이는 곳.</p>
-    <p class="lang-switch">
-      <a href="/en/">English →</a>
+    <p class="tagline">
+      여기는 생각 dump가 모이는 곳. ML 리서치 사이언티스트 출신, 지금은 7명짜리 cross-functional 제품 팀을 리딩하고 있다. AI, 팀 빌딩, 의사결정에 대한 글을 쓴다.
     </p>
+    <p class="lang-switch"><a href="/en/">English →</a></p>
   </header>
 
   <main>
@@ -52,12 +62,17 @@ const jsonLd = {
       {
         koPosts.map((post) => {
           const date = post.data.pubDate.toISOString().split('T')[0];
+          const mins = readingTime(post.body ?? '');
           const hasEn = enSlugs.has(post.id);
           return (
             <li>
-              <a href={`/posts/${post.id}/`}>{post.data.title}</a>
-              <p class="meta" style="margin-top: 0.25rem; margin-bottom: 0;">
+              <h2 class="post-list-title">
+                <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+              </h2>
+              <p class="post-list-meta">
                 <time datetime={date}>{date}</time>
+                <span class="sep">·</span>
+                <span>{mins} min read</span>
                 {hasEn && (
                   <>
                     <span class="sep">·</span>
@@ -65,10 +80,23 @@ const jsonLd = {
                   </>
                 )}
               </p>
+              <p class="post-list-description">{post.data.description}</p>
             </li>
           );
         })
       }
     </ul>
   </main>
+
+  <footer class="site">
+    <p>
+      © 2026 Lee Gihun (이기훈)
+      <span class="sep">·</span>
+      <a href="https://github.com/Lee-Gihun">GitHub</a>
+      <span class="sep">·</span>
+      <a href="/llms.txt">llms.txt</a>
+      <span class="sep">·</span>
+      <a href="/sitemap-index.xml">Sitemap</a>
+    </p>
+  </footer>
 </BaseLayout>

@@ -41,7 +41,7 @@ export const GET: APIRoute = async ({ site }) => {
   );
 
   const content = [
-    `# Gihun's brain — Full posts`,
+    `# Gihun's brain. Full posts`,
     '',
     `## Korean`,
     '',

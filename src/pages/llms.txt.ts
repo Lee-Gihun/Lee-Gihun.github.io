@@ -14,7 +14,7 @@ export const GET: APIRoute = async ({ site }) => {
   const lines = [
     `# Gihun's brain`,
     '',
-    `> Lee Gihun (이기훈) — ML researcher background, currently leading a 7-person cross-functional product team (backend, frontend, ML, design, PM). Writes on AI, team building, decision-making, and leadership. Primary language Korean; selected posts also available in English.`,
+    `> Lee Gihun (이기훈). ML researcher background, currently leading a 7-person cross-functional product team (backend, frontend, ML, design, PM). Writes on AI, team building, decision-making, and leadership. Primary language Korean. Selected posts also available in English.`,
     '',
     `## Posts (Korean)`,
     '',
@@ -23,14 +23,14 @@ export const GET: APIRoute = async ({ site }) => {
       const enLink = enSlugs.has(p.id)
         ? ` [EN: ${baseUrl}/en/posts/${p.id}/]`
         : '';
-      return `- [${p.data.title}](${baseUrl}/posts/${p.id}/) — ${date}.${enLink} ${p.data.description}`;
+      return `- [${p.data.title}](${baseUrl}/posts/${p.id}/) (${date}).${enLink} ${p.data.description}`;
     }),
     '',
     `## Posts (English)`,
     '',
     ...enPosts.map((p) => {
       const date = p.data.pubDate.toISOString().split('T')[0];
-      return `- [${p.data.title}](${baseUrl}/en/posts/${p.id}/) — ${date}. ${p.data.description}`;
+      return `- [${p.data.title}](${baseUrl}/en/posts/${p.id}/) (${date}). ${p.data.description}`;
     }),
     '',
     `## Optional`,

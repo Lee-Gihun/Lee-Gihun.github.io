@@ -1,6 +1,6 @@
 ---
 title: "AI 시대의 매니저는 무엇을 하는 사람인가"
-description: "Elena Verna의 'IC work is the new career flex'에 리더 쪽 그림을 한 조각 더한다. AI 시대에 IC가 매니징으로, 리더가 IC로 확장하는 두 방향의 변화. 그리고 사라지지 않는 일 하나 — 기준 세우기."
+description: "AI가 매니저 레이어를 줄인다면, 남아 있는 리더는 무엇을 하는 사람인가. Elena Verna의 'IC work is the new career flex'에 리더 쪽 그림을 한 조각 더하는 글."
 pubDate: 2026-05-18
 ---
 
