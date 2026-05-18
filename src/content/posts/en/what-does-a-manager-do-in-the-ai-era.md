@@ -64,7 +64,7 @@ The PM on our team pushed me to participate in user research directly, to show u
 
 The engineers on our team pointed out that my understanding of concepts like Kafka and message brokers wasn't deep enough. And then they walked me through, step by step, what exactly I needed to know to be able to make good decisions. I'm grateful for that.
 
-These three moments have done more to make me a real leader than any theory of management I've held in my head. The team didn't keep me locked behind my title. That's the actual mechanism through which I've been able to maintain my instincts.
+I'd heard plenty of advice about how a manager should work. But what actually changed me were these moments with my team. Not keeping me behind my title. That's the real reason I've been able to maintain my instincts.
 
 ## Don't let me off the hook just because I'm a manager
 
