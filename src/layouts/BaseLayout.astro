@@ -1,0 +1,222 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  type?: 'website' | 'article';
+  pubDate?: Date;
+  lang?: string;
+  markdownPath?: string;
+}
+
+const {
+  title,
+  description,
+  type = 'website',
+  pubDate,
+  lang = 'ko',
+  markdownPath,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const siteName = "Gihun's brain";
+const author = 'Lee Gihun';
+---
+<!DOCTYPE html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="canonical" href={canonicalURL} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={author} />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'ko_KR'} />
+    {pubDate && (
+      <meta property="article:published_time" content={pubDate.toISOString()} />
+    )}
+    {pubDate && <meta property="article:author" content={author} />}
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {markdownPath && (
+      <link rel="alternate" type="text/markdown" href={markdownPath} />
+    )}
+
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: light dark;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family:
+      -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
+      'Noto Sans KR', 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.75;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    max-width: 38rem;
+    margin: 0 auto;
+    padding: 3rem 1.25rem 4rem;
+    color: #1a1a1a;
+    background: #fafafa;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    line-height: 1.4;
+    margin: 0 0 0.5rem;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: 1.15rem;
+    line-height: 1.5;
+    margin: 2.5rem 0 0.75rem;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: 1rem;
+    margin: 2rem 0 0.5rem;
+    font-weight: 600;
+  }
+
+  p,
+  ul,
+  ol {
+    margin: 1rem 0;
+  }
+
+  a {
+    color: #0050b3;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+    font-size: 0.9em;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #d4d4d4;
+    margin: 2.5rem 0;
+  }
+
+  .meta {
+    color: #666;
+    font-size: 0.875rem;
+    margin: 0 0 2rem;
+  }
+
+  .meta .sep {
+    margin: 0 0.5em;
+    color: #aaa;
+  }
+
+  nav.top {
+    margin: 0 0 2rem;
+    font-size: 0.9rem;
+  }
+
+  nav.top a {
+    color: #666;
+    text-decoration: none;
+  }
+
+  nav.top a:hover {
+    text-decoration: underline;
+  }
+
+  footer.post {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e4e4e4;
+    color: #888;
+    font-size: 0.85rem;
+  }
+
+  ul.post-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  ul.post-list li {
+    margin-bottom: 1.75rem;
+  }
+
+  ul.post-list a {
+    font-weight: 500;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body {
+      color: #e4e4e4;
+      background: #141414;
+    }
+
+    a {
+      color: #6ab0ff;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    hr {
+      border-top-color: #333;
+    }
+
+    .meta {
+      color: #999;
+    }
+
+    .meta .sep {
+      color: #555;
+    }
+
+    nav.top a {
+      color: #999;
+    }
+
+    footer.post {
+      border-top-color: #2a2a2a;
+      color: #777;
+    }
+  }
+</style>

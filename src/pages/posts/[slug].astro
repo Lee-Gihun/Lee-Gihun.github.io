@@ -1,0 +1,38 @@
+---
+import { getCollection, render } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+function readingTime(text: string): number {
+  const stripped = text
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`]*`/g, '')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[#*_~>\-+|]/g, '')
+    .trim();
+  return Math.max(1, Math.round(stripped.length / 500));
+}
+
+const minutes = readingTime(post.body ?? '');
+---
+<PostLayout
+  title={post.data.title}
+  title_en={post.data.title_en}
+  description={post.data.description}
+  pubDate={post.data.pubDate}
+  lang={post.data.lang}
+  slug={post.id}
+  readingTime={minutes}
+>
+  <Content />
+</PostLayout>

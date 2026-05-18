@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const siteName = "Gihun's brain";
+const siteDescription =
+  "Lee Gihun (이기훈) — ML researcher background, currently leading a 7-person cross-functional product team. 생각 dump와 팀 공유 공간. AI, 팀 빌딩, 의사결정에 대한 글.";
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteName,
+  url: 'https://lee-gihun.github.io/',
+  description: siteDescription,
+  inLanguage: 'ko',
+  author: {
+    '@type': 'Person',
+    name: 'Lee Gihun',
+    alternateName: '이기훈',
+    sameAs: ['https://github.com/Lee-Gihun'],
+  },
+};
+---
+<BaseLayout
+  title={siteName}
+  description={siteDescription}
+  type="website"
+  lang="ko"
+>
+  <script
+    slot="head"
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+  />
+
+  <header>
+    <h1>{siteName}</h1>
+    <p>여기는 생각 dump가 모이는 곳.</p>
+  </header>
+
+  <main>
+    <ul class="post-list">
+      {
+        posts.map((post) => {
+          const date = post.data.pubDate.toISOString().split('T')[0];
+          return (
+            <li>
+              <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+              <p class="meta" style="margin-top: 0.25rem; margin-bottom: 0;">
+                <time datetime={date}>{date}</time>
+              </p>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </main>
+</BaseLayout>

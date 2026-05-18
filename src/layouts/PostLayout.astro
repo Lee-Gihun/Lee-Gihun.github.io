@@ -1,0 +1,85 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  title_en: string;
+  description: string;
+  pubDate: Date;
+  lang: string;
+  slug: string;
+  readingTime: number;
+}
+
+const { title, title_en, description, pubDate, lang, slug, readingTime } =
+  Astro.props;
+
+const siteUrl = Astro.site!.toString().replace(/\/$/, '');
+const postUrl = `${siteUrl}/posts/${slug}/`;
+const markdownUrl = `${siteUrl}/posts/${slug}.md`;
+const formattedDate = pubDate.toISOString().split('T')[0];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  alternativeHeadline: title_en,
+  description,
+  inLanguage: lang,
+  datePublished: pubDate.toISOString(),
+  dateModified: pubDate.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: 'Lee Gihun',
+    alternateName: '이기훈',
+    url: 'https://lee-gihun.github.io/',
+    sameAs: ['https://github.com/Lee-Gihun'],
+  },
+  publisher: {
+    '@type': 'Person',
+    name: 'Lee Gihun',
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': postUrl,
+  },
+  url: postUrl,
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  type="article"
+  pubDate={pubDate}
+  lang={lang}
+  markdownPath={markdownUrl}
+>
+  <script
+    slot="head"
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+  />
+
+  <nav class="top">
+    <a href="/">← Gihun's brain</a>
+  </nav>
+
+  <article>
+    <header>
+      <h1>{title}</h1>
+      <p class="meta">
+        <time datetime={formattedDate}>{formattedDate}</time>
+        <span class="sep">·</span>
+        <span>{readingTime} min read</span>
+      </p>
+    </header>
+
+    <slot />
+
+    <footer class="post">
+      <p>
+        <a href={markdownUrl}>Markdown 버전</a> · <a href="/llms.txt">llms.txt</a>
+      </p>
+    </footer>
+  </article>
+</BaseLayout>
